@@ -6,11 +6,20 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: 'jsdom',
+    setupFiles: './vitest.setup.js',
+    globals: true,
     server: {
       deps: {
-        inline: ['@hexlet/chatbot-v2']
+        inline: ['@hexlet/chatbot-v2'],
+        fallbackCJS: true
       }
     },
-    setupFiles: './vitest.setup.js'
+    deps: {
+      optimizer: {
+        web: {
+          include: ['parse5', 'jsdom']
+        }
+      }
+    }
   }
 })
