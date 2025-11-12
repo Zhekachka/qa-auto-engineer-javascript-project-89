@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom'
 import { expect, test, vi, beforeAll } from 'vitest'
 import { setupTest } from './utils/testUtils'
 
@@ -31,10 +32,10 @@ test('Возврат на начальный экран при нажатии к
 })
 
 test('Отображение иконки рядом с сообщением', async () => {
-  const { chat } = setupTest()
+  const { chat, screen } = setupTest()
   await chat.open()
   
-  const icon = document.querySelector('.message img.avatar')
+  const icon = screen.getByRole('img', { name: 'tota' })
   expect(icon).toBeInTheDocument()
   expect(icon).toHaveAttribute('src')
   expect(icon).toHaveAttribute('alt', 'tota')

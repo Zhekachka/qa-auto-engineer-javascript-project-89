@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom'
 import { expect, test, vi, beforeAll } from 'vitest'
 import { setupTest } from './utils/testUtils'
 
