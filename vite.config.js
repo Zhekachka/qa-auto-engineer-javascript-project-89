@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
@@ -11,15 +11,15 @@ export default defineConfig({
     server: {
       deps: {
         inline: ['@hexlet/chatbot-v2'],
-        fallbackCJS: true
-      }
+        fallbackCJS: true,
+      },
     },
     deps: {
       optimizer: {
         web: {
-          include: ['parse5', 'jsdom']
-        }
-      }
-    }
-  }
+          include: ['parse5', 'jsdom'],
+        },
+      },
+    },
+  },
 })

@@ -1,3 +1,5 @@
+import { expect } from 'vitest'
+
 export class ChatPage {
   constructor(user, screen) {
     this.user = user
