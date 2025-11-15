@@ -10,7 +10,7 @@ export const CHAT_TEXTS = {
   careerChangePrograms: /У нас есть программы обучения новой профессии/,
   goBack: 'Вернуться назад',
   goToStart: 'Вернуться в начало',
-  close: 'Close'
+  close: 'Close',
 }
 
 export const APP_TEXTS = {
@@ -22,6 +22,6 @@ export const APP_TEXTS = {
   openChatButton: 'Открыть Чат',
   testData: {
     email: 'test@example.com',
-    password: 'password123'
-  }
+    password: 'password123',
+  },
 }
