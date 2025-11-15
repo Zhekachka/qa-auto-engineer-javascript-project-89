@@ -1,57 +1,81 @@
 import '@testing-library/jest-dom'
-import { expect, test, vi, beforeAll } from 'vitest'
+import { expect, test, vi, beforeAll, beforeEach } from 'vitest'
 import { setupTest } from './utils/testUtils'
+import { CHAT_TEXTS } from './constants/texts'
+
+let screen, chat
 
 beforeAll(() => {
   window.HTMLElement.prototype.scrollIntoView = vi.fn()
 })
 
+beforeEach(() => {
+  ({ screen, chat } = setupTest())
+})
+
 test('Проверка начального состояния, открытие и закрытие модального окна чата', async () => {
-  const { chat, screen } = setupTest()
-
-  const openButton = screen.getByRole('button', { name: 'Открыть Чат' })
+  const openButton = screen.getByRole('button', { name: CHAT_TEXTS.openButton })
   expect(openButton).toBeInTheDocument()
-
   await chat.open()
   await chat.verifyChatTitle()
   await chat.verifyInitialMessage()
-
-  expect(screen.getByRole('button', { name: 'Начать разговор' })).toBeInTheDocument()
-
+  expect(screen.getByRole('button', { name: CHAT_TEXTS.startConversation })).toBeInTheDocument()
   await chat.close()
-  expect(screen.queryByText('Виртуальный помощник')).not.toBeInTheDocument()
+  expect(screen.queryByText(CHAT_TEXTS.chatTitle)).not.toBeInTheDocument()
 })
 
 test('Начало разговора с ботом', async () => {
-  const { chat, screen } = setupTest()
-
   await chat.open()
   await chat.startConversation()
-
-  expect(await screen.findByText(/Помогу вам выбрать подходящий курс/)).toBeInTheDocument()
-  expect(screen.getByRole('button', { name: 'Попробовать себя в IT' })).toBeInTheDocument()
+  expect(await screen.findByText(CHAT_TEXTS.helpChooseCourse)).toBeInTheDocument()
+  expect(screen.getByRole('button', { name: CHAT_TEXTS.tryIT })).toBeInTheDocument()
 })
 
 test('Проверка скролла к новым сообщениям', async () => {
-  const { chat } = setupTest()
   window.HTMLElement.prototype.scrollIntoView.mockClear()
-
   await chat.open()
   expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalledTimes(1)
-
   await chat.startConversation()
   expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalledTimes(2)
-
   await chat.chooseITOption()
   expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalledTimes(3)
 })
 
 test('Выбор варианта ответа', async () => {
-  const { chat, screen } = setupTest()
-
   await chat.open()
   await chat.startConversation()
   await chat.chooseITOption()
+  expect(screen.getByText(CHAT_TEXTS.preparatoryCourses)).toBeInTheDocument()
+})
 
-  expect(screen.getByText(/У нас есть подготовительные курсы/)).toBeInTheDocument()
+test('Возврат на предыдущий экран при нажатии кнопки "Вернуться назад"', async () => {
+  await chat.open()
+  await chat.startConversation()
+  await chat.chooseITOption()
+  expect(screen.getByText(CHAT_TEXTS.preparatoryCourses)).toBeInTheDocument()
+  await chat.goBack()
+  expect(screen.getAllByText(CHAT_TEXTS.helpChooseCourse)[1]).toBeInTheDocument()
+})
+
+test('Возврат на начальный экран при нажатии кнопки "Вернуться в начало"', async () => {
+  await chat.open()
+  await chat.startConversation()
+  await chat.chooseITOption()
+  await chat.chooseCareerChange()
+  expect(screen.getByText(CHAT_TEXTS.careerChangePrograms)).toBeInTheDocument()
+  await chat.goToStart()
+  expect(screen.getAllByText(CHAT_TEXTS.initialGreeting)[1]).toBeInTheDocument()
+})
+
+test('Отображение иконки рядом с сообщением', async () => {
+  await chat.open()
+  const icon = screen.getByRole('img', { name: 'tota' })
+  expect(icon).toBeInTheDocument()
+  expect(icon).toHaveAttribute('src')
+  expect(icon).toHaveAttribute('alt', 'tota')
+})
+
+test('Проверка заголовка модального окна', async () => {
+  await chat.open()
+  await chat.verifyChatTitle()
 })
