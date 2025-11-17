@@ -54,7 +54,6 @@ export class ChatPage {
     return this
   }
 
-  // Локаторы
   getOpenButton() {
     return this.screen.getByRole('button', { name: CHAT_TEXTS.openButton })
   }

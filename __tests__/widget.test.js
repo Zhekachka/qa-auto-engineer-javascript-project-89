@@ -1,16 +1,23 @@
 import '@testing-library/jest-dom'
 import { expect, test, vi, beforeAll, beforeEach } from 'vitest'
-import { setupTest } from './utils/testUtils'
 import { CHAT_TEXTS } from './constants/texts'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import Widget from '@hexlet/chatbot-v2'
+import steps from '../__fixtures__/steps'
+import { ChatPage } from './pages/widgetPage'
 
-let screen, chat
+let user, screen, chat
 
 beforeAll(() => {
   window.HTMLElement.prototype.scrollIntoView = vi.fn()
 })
 
 beforeEach(() => {
-  ({ screen, chat } = setupTest())
+  user = userEvent.setup()
+  render(Widget(steps))
+  chat = new ChatPage(user, screen)
+  return { user, chat, screen }
 })
 
 test('Проверка начального состояния, открытие и закрытие модального окна чата', async () => {

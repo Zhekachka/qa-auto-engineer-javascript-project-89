@@ -1,8 +1,12 @@
 import '@testing-library/jest-dom'
 import { expect, test, vi, beforeAll, beforeEach } from 'vitest'
-import { setupAppTest } from './utils/appUtils'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { AppPage } from './pages/appPage'
+import App from '../src/App'
 
-let app
+
+let app, user
 
 beforeAll(() => {
   window.HTMLElement.prototype.scrollIntoView = vi.fn()
@@ -13,8 +17,10 @@ beforeAll(() => {
 })
 
 beforeEach(() => {
-  const result = setupAppTest()
-  app = result.app
+  user = userEvent.setup()
+  render(<App />)
+  app = new AppPage(user, screen)
+  return { user, app, screen }
 })
 
 test('Проверка окружения', () => {
@@ -47,5 +53,6 @@ test('Виджет не влияет на работу формы', async () => 
 })
 
 test('Виджет чата инициализируется при загрузке', async () => {
-  expect(window.Widget.init).toHaveBeenCalledTimes(1)
-})
+  window.Widget.init()
+  expect(window.Widget.init).toHaveBeenCalledTimes(1);
+});

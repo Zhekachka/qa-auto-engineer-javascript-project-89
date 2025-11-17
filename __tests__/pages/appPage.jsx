@@ -1,5 +1,5 @@
 import { expect } from 'vitest'
-import { APP_TEXTS } from '../constants/appTexts'
+import { APP_TEXTS } from '../constants/texts'
 
 export class AppPage {
   constructor(user, screen) {
@@ -43,7 +43,6 @@ export class AppPage {
     return this
   }
 
-  // Локаторы
   getEmailInput() {
     return this.screen.getByLabelText(APP_TEXTS.emailLabel)
   }
