@@ -5,7 +5,6 @@ import userEvent from '@testing-library/user-event'
 import { AppPage } from './pages/appPage'
 import App from '../src/App'
 
-
 let app, user
 
 beforeAll(() => {
@@ -54,5 +53,5 @@ test('Виджет не влияет на работу формы', async () => 
 
 test('Виджет чата инициализируется при загрузке', async () => {
   window.Widget.init()
-  expect(window.Widget.init).toHaveBeenCalledTimes(1);
-});
+  expect(window.Widget.init).toHaveBeenCalledTimes(1)
+})

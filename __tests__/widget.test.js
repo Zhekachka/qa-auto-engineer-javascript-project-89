@@ -7,7 +7,7 @@ import Widget from '@hexlet/chatbot-v2'
 import steps from '../__fixtures__/steps'
 import { ChatPage } from './pages/widgetPage'
 
-let user, screen, chat
+let user, chat
 
 beforeAll(() => {
   window.HTMLElement.prototype.scrollIntoView = vi.fn()
